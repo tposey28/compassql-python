@@ -19,8 +19,6 @@ def _make(name_, description, properties, allow_wildcard, strict_, checker):
 
 
 def _fq_attr(fq, attr, default=None):
-    if isinstance(fq, dict):
-        return fq.get(attr, default)
     return getattr(fq, attr, default)
 
 
@@ -264,7 +262,7 @@ FIELD_CONSTRAINTS: list[EncodingConstraintModel] = [
         [Property.SCALE, get_encoding_nested_prop("scale", "zero"), Property.BIN],
         False, True,
         lambda fq, schema, wc, opt: (
-            not (_fq_attr(_fq_attr(fq, "scale") or {}, "zero") is True)
+            not ((_fq_attr(fq, "scale") or {}).get("zero") is True)
             if _fq_attr(fq, "bin") and _fq_attr(fq, "scale") else True
         ),
     ),
@@ -334,7 +332,7 @@ FIELD_CONSTRAINTS: list[EncodingConstraintModel] = [
         [Property.CHANNEL, Property.FIELD],
         False, False,
         lambda fq, schema, wc, opt: (
-            schema.cardinality(fq) <= opt.max_cardinality_for_categorical_color
+            schema.cardinality(vars(fq)) <= opt.max_cardinality_for_categorical_color
             if (_fq_attr(fq, "channel") in (Channel.COLOR, "color") and
                 _fq_attr(fq, "type") in (VLType.NOMINAL, "nominal", "key"))
             else True
@@ -347,7 +345,7 @@ FIELD_CONSTRAINTS: list[EncodingConstraintModel] = [
         [Property.CHANNEL, Property.FIELD, Property.BIN, Property.TIMEUNIT],
         False, False,
         lambda fq, schema, wc, opt: (
-            schema.cardinality(fq) <= opt.max_cardinality_for_facet
+            schema.cardinality(vars(fq)) <= opt.max_cardinality_for_facet
             if _fq_attr(fq, "channel") in (Channel.ROW, Channel.COLUMN, "row", "column")
             else True
         ),
@@ -359,7 +357,7 @@ FIELD_CONSTRAINTS: list[EncodingConstraintModel] = [
         [Property.CHANNEL, Property.FIELD, Property.BIN, Property.TIMEUNIT],
         False, False,
         lambda fq, schema, wc, opt: (
-            schema.cardinality(fq) <= opt.max_cardinality_for_shape
+            schema.cardinality(vars(fq)) <= opt.max_cardinality_for_shape
             if _fq_attr(fq, "channel") in (Channel.SHAPE, "shape")
             else True
         ),

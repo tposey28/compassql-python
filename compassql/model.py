@@ -41,7 +41,9 @@ from compassql.wildcardindex import WildcardIndex
 
 
 def _dict_to_spec_query(d: dict) -> SpecQuery:
-    encodings = list(d.get("encodings", []))
+    from compassql.query.encoding import encoding_query_from_dict
+    raw = d.get("encodings", [])
+    encodings = [encoding_query_from_dict(e) if isinstance(e, dict) else e for e in raw]
     return SpecQuery(
         mark=d.get("mark"),
         encodings=encodings,
@@ -57,16 +59,21 @@ def _dict_to_spec_query(d: dict) -> SpecQuery:
 
 
 def _enc_get(enc_q: Any, attr: str) -> Any:
-    if isinstance(enc_q, dict):
-        return enc_q.get(attr)
     return getattr(enc_q, attr, None)
 
 
 def _enc_set(enc_q: Any, attr: str, value: Any) -> None:
-    if isinstance(enc_q, dict):
-        enc_q[attr] = value
-    else:
-        setattr(enc_q, attr, value)
+    setattr(enc_q, attr, value)
+
+
+def _copy_encoding(enc_q: Any) -> Any:
+    """Shallow-copy an encoding dataclass, copying any dict-valued nested props."""
+    c = copy.copy(enc_q)
+    for attr in ("bin", "scale", "axis", "legend"):
+        v = getattr(c, attr, None)
+        if isinstance(v, dict):
+            setattr(c, attr, dict(v))
+    return c
 
 
 class SpecQueryModel:
@@ -139,6 +146,7 @@ class SpecQueryModel:
 
         # Auto-add count if configured
         if opt.auto_add_count:
+            from compassql.query.encoding import AutoCountQuery
             enc_len = len(spec_q.encodings)
             channel_wc = Wildcard(
                 name=get_default_name("channel") + str(enc_len),
@@ -148,11 +156,11 @@ class SpecQueryModel:
                 name=get_default_name("autoCount") + str(enc_len),
                 enum=[False, True],
             )
-            count_enc: dict = {
-                "channel": channel_wc,
-                "autoCount": auto_count_wc,
-                "type": "quantitative",
-            }
+            count_enc = AutoCountQuery(
+                channel=channel_wc,
+                autoCount=auto_count_wc,
+                type="quantitative",
+            )
             spec_q.encodings.append(count_enc)
             wildcard_index.set_encoding_property(enc_len, "channel", channel_wc)
             wildcard_index.set_encoding_property(enc_len, "autoCount", auto_count_wc)
@@ -176,9 +184,19 @@ class SpecQueryModel:
     # ---- duplication ----
 
     def duplicate(self) -> "SpecQueryModel":
-        spec_copy = copy.deepcopy(self._spec)
-        assigned_copy = copy.deepcopy(self._assigned_wildcard_index)
-        return SpecQueryModel(spec_copy, self._wildcard_index, self._schema, self._opt, assigned_copy)
+        spec_copy = SpecQuery(
+            mark=self._spec.mark,
+            encodings=[_copy_encoding(e) for e in self._spec.encodings],
+            data=self._spec.data,
+            transform=self._spec.transform,
+            width=self._spec.width,
+            height=self._spec.height,
+            background=self._spec.background,
+            padding=self._spec.padding,
+            title=self._spec.title,
+            config=self._spec.config,
+        )
+        return SpecQueryModel(spec_copy, self._wildcard_index, self._schema, self._opt, dict(self._assigned_wildcard_index))
 
     # ---- mark mutation ----
 

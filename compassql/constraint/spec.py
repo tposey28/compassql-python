@@ -72,8 +72,6 @@ class SpecConstraintModel(AbstractConstraintModel):
 
 def _enc_attr(enc_q: Any, prop) -> Any:
     key = prop if isinstance(prop, str) else str(prop)
-    if isinstance(enc_q, dict):
-        return enc_q.get(key)
     return getattr(enc_q, key, None)
 
 

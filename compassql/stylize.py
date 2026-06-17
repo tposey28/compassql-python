@@ -9,12 +9,12 @@ from compassql.schema import Schema, ExpandedType
 
 def _scale_type(enc_q: Any) -> str | None:
     """Infer the Vega-Lite scale type for an encoding query."""
-    scale = enc_q.get("scale") if isinstance(enc_q, dict) else getattr(enc_q, "scale", None)
+    scale = getattr(enc_q, "scale", None)
     if isinstance(scale, dict) and scale.get("type"):
         return scale["type"]
-    field_type = enc_q.get("type") if isinstance(enc_q, dict) else getattr(enc_q, "type", None)
-    bin_val = enc_q.get("bin") if isinstance(enc_q, dict) else getattr(enc_q, "bin", None)
-    time_unit = enc_q.get("timeUnit") if isinstance(enc_q, dict) else getattr(enc_q, "timeUnit", None)
+    field_type = getattr(enc_q, "type", None)
+    bin_val = getattr(enc_q, "bin", None)
+    time_unit = getattr(enc_q, "timeUnit", None)
     if bin_val:
         return "bin-ordinal"
     if time_unit:
@@ -34,16 +34,11 @@ def _has_discrete_domain(scale_type_str: str | None) -> bool:
 
 
 def _enc_get(enc_q: Any, attr: str) -> Any:
-    if isinstance(enc_q, dict):
-        return enc_q.get(attr)
     return getattr(enc_q, attr, None)
 
 
 def _enc_set(enc_q: Any, attr: str, value: Any) -> None:
-    if isinstance(enc_q, dict):
-        enc_q[attr] = value
-    else:
-        setattr(enc_q, attr, value)
+    setattr(enc_q, attr, value)
 
 
 def stylize(answer_set: list, schema: Schema, opt: QueryConfig) -> list:
@@ -68,9 +63,7 @@ def _small_range_step(spec_m: Any, schema: Schema, enc_q_index: dict, opt: Query
     y_enc_q = enc_q_index.get("y")
     if y_enc_q is not None and is_field_query(y_enc_q):
         has_row = enc_q_index.get("row") is not None
-        cardinality = schema.cardinality(
-            y_enc_q if isinstance(y_enc_q, dict) else y_enc_q.__dict__
-        )
+        cardinality = schema.cardinality(vars(y_enc_q))
         max_card = opt.small_range_step_for_high_cardinality_or_facet["maxCardinality"]
         range_step = opt.small_range_step_for_high_cardinality_or_facet["rangeStep"]
         if has_row or (cardinality is not None and cardinality > max_card):
@@ -86,9 +79,7 @@ def _small_range_step(spec_m: Any, schema: Schema, enc_q_index: dict, opt: Query
     x_enc_q = enc_q_index.get("x")
     if x_enc_q is not None and is_field_query(x_enc_q):
         has_col = enc_q_index.get("column") is not None
-        cardinality = schema.cardinality(
-            x_enc_q if isinstance(x_enc_q, dict) else x_enc_q.__dict__
-        )
+        cardinality = schema.cardinality(vars(x_enc_q))
         max_card = opt.small_range_step_for_high_cardinality_or_facet["maxCardinality"]
         range_step = opt.small_range_step_for_high_cardinality_or_facet["rangeStep"]
         if has_col or (cardinality is not None and cardinality > max_card):
@@ -111,9 +102,7 @@ def _nominal_color_scale(spec_m: Any, schema: Schema, enc_q_index: dict, opt: Qu
     if color_enc_q is not None and is_field_query(color_enc_q):
         field_type = _enc_get(color_enc_q, "type")
         if field_type in ("nominal", "key"):
-            cardinality = schema.cardinality(
-                color_enc_q if isinstance(color_enc_q, dict) else color_enc_q.__dict__
-            )
+            cardinality = schema.cardinality(vars(color_enc_q))
             max_card = opt.nominal_color_scale_for_high_cardinality["maxCardinality"]
             palette = opt.nominal_color_scale_for_high_cardinality["palette"]
             if cardinality is not None and cardinality > max_card:
@@ -144,7 +133,7 @@ def _x_axis_on_top(spec_m: Any, schema: Schema, enc_q_index: dict, opt: QueryCon
             and _has_discrete_domain(_scale_type(y_enc_q))
         ):
             cardinality = schema.cardinality(
-                y_enc_q if isinstance(y_enc_q, dict) else y_enc_q.__dict__
+                vars(y_enc_q)
             )
             max_card = opt.x_axis_on_top_for_high_y_cardinality_without_column["maxCardinality"]
             if cardinality is not None and cardinality > max_card:

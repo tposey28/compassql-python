@@ -54,46 +54,56 @@ class AutoCountQuery(EncodingQueryBase):
 
 EncodingQuery = Union[FieldQuery, ValueQuery, AutoCountQuery]
 
+_FIELD_QUERY_KEYS = frozenset({
+    "channel", "description", "field", "type", "aggregate",
+    "timeUnit", "bin", "scale", "sort", "stack", "axis",
+    "legend", "format", "hasFn",
+})
+
+
+def encoding_query_from_dict(d: dict) -> "EncodingQuery":
+    """Convert a plain encoding dict to the appropriate dataclass."""
+    if "value" in d:
+        return ValueQuery(
+            channel=d.get("channel"),
+            description=d.get("description"),
+            value=d.get("value"),
+        )
+    if "autoCount" in d:
+        return AutoCountQuery(
+            channel=d.get("channel"),
+            description=d.get("description"),
+            autoCount=d.get("autoCount"),
+            type=d.get("type", "quantitative"),
+        )
+    return FieldQuery(**{k: v for k, v in d.items() if k in _FIELD_QUERY_KEYS})
+
 
 # ---------------------------------------------------------------------------
 # Type guards
 # ---------------------------------------------------------------------------
 
 def is_value_query(enc_q: Any) -> bool:
-    if isinstance(enc_q, ValueQuery):
-        return True
-    if isinstance(enc_q, dict):
-        return enc_q.get("value") is not None
-    return False
+    return isinstance(enc_q, ValueQuery)
 
 
 def is_field_query(enc_q: Any) -> bool:
-    if isinstance(enc_q, FieldQuery):
-        return True
-    if isinstance(enc_q, dict):
-        return bool(enc_q.get("field")) or enc_q.get("aggregate") == "count"
-    return False
+    return isinstance(enc_q, FieldQuery)
 
 
 def is_auto_count_query(enc_q: Any) -> bool:
-    if isinstance(enc_q, AutoCountQuery):
-        return True
-    if isinstance(enc_q, dict):
-        return "autoCount" in enc_q
-    return False
+    return isinstance(enc_q, AutoCountQuery)
 
 
 def is_disabled_auto_count_query(enc_q: Any) -> bool:
-    return is_auto_count_query(enc_q) and _get(enc_q, "autoCount") is False
+    return isinstance(enc_q, AutoCountQuery) and enc_q.autoCount is False
 
 
 def is_enabled_auto_count_query(enc_q: Any) -> bool:
-    return is_auto_count_query(enc_q) and _get(enc_q, "autoCount") is True
+    return isinstance(enc_q, AutoCountQuery) and enc_q.autoCount is True
 
 
 def _get(obj: Any, attr: str) -> Any:
-    if isinstance(obj, dict):
-        return obj.get(attr)
     return getattr(obj, attr, None)
 
 

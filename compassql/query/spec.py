@@ -31,21 +31,20 @@ class SpecQuery:
 
 
 def from_spec(spec: dict[str, Any]) -> SpecQuery:
+    from compassql.query.encoding import encoding_query_from_dict
     encodings: list[EncodingQuery] = []
     for channel, channel_def in (spec.get("encoding") or {}).items():
-        from compassql.query.encoding import FieldQuery, is_field_query as _ifq
-        enc_q: dict[str, Any] = {"channel": channel}
+        props: dict[str, Any] = {"channel": channel}
         if isinstance(channel_def, dict):
             for prop, val in channel_def.items():
                 if val is not None:
                     if prop in ("bin", "scale", "axis", "legend") and val is None:
-                        enc_q[prop] = False
+                        props[prop] = False
                     else:
-                        enc_q[prop] = val
-        # if aggregate=count and no field, set field='*'
-        if enc_q.get("aggregate") == "count" and not enc_q.get("field"):
-            enc_q["field"] = "*"
-        encodings.append(enc_q)  # type: ignore[arg-type]
+                        props[prop] = val
+        if props.get("aggregate") == "count" and not props.get("field"):
+            props["field"] = "*"
+        encodings.append(encoding_query_from_dict(props))
 
     return SpecQuery(
         mark=spec.get("mark"),
