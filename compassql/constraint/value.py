@@ -6,8 +6,6 @@ from compassql.property import Property
 
 
 def _fq_attr(fq, attr, default=None):
-    if isinstance(fq, dict):
-        return fq.get(attr, default)
     return getattr(fq, attr, default)
 
 
