@@ -1,13 +1,27 @@
-npm-debug.log
-node_modules
-compassql.min.js
-compassql.min.js.map
-compassql-schema.json
-compassql.js
-coverage
-build
-.nyc_output/
-.eslintrc.js
-prettier.config.js
-.prettierignore
-.eslintignore
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.venv/
+venv/
+env/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OMC
+.omc/
