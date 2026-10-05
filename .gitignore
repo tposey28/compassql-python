@@ -24,7 +24,6 @@ htmlcov/
 *.swo
 
 # OMC
-.omc/
 .serena/
 /.idea/
 AGENTS.md

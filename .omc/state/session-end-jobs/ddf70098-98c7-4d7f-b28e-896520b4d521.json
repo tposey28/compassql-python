@@ -1,0 +1,328 @@
+{
+  "version": 1,
+  "jobId": "d7461e94-2027-4acb-a3c9-c48878a35007",
+  "sessionId": "ddf70098-98c7-4d7f-b28e-896520b4d521",
+  "scopeKey": "d75a1f9ccfcde61b9546e999f8717ea12c025575f5b7a9d81000e130abcbf1af",
+  "revision": 41,
+  "createdAt": "2026-08-04T17:26:16.940Z",
+  "updatedAt": "2026-08-04T17:26:18.062Z",
+  "producerGraceExpiresAt": "2026-08-04T17:26:46.941Z",
+  "bestEffortDeadlineAt": "2026-08-04T17:27:37.941Z",
+  "producers": {
+    "core": {
+      "state": "sealed",
+      "intentKey": "9685756769ed7607a59a8e409aef91d2e558b1594f82d292844610999fb8a85c",
+      "payloadDigest": "9685756769ed7607a59a8e409aef91d2e558b1594f82d292844610999fb8a85c",
+      "sealedAt": "2026-08-04T17:26:16.983Z",
+      "sealedBy": "foreground"
+    },
+    "wiki": {
+      "state": "no-op",
+      "sealedAt": "2026-08-04T17:26:16.940Z",
+      "sealedBy": "wiki-producer"
+    }
+  },
+  "actions": {
+    "foreground-cleanup": {
+      "class": "required",
+      "phase": "deferred-required",
+      "status": "completed",
+      "attempts": 0,
+      "idempotencyKey": "febf6dba2f2536433960a07f7cedce72e946b43ced0896570df80f017b8914d2",
+      "payload": {
+        "transcriptPath": "/home/julsey/.claude/projects/-home-julsey-Projects-compassql-python/ddf70098-98c7-4d7f-b28e-896520b4d521.jsonl",
+        "cwd": "/home/julsey/Projects/compassql-python",
+        "reason": "other",
+        "input": {
+          "session_id": "ddf70098-98c7-4d7f-b28e-896520b4d521",
+          "transcript_path": "/home/julsey/.claude/projects/-home-julsey-Projects-compassql-python/ddf70098-98c7-4d7f-b28e-896520b4d521.jsonl",
+          "cwd": "/home/julsey/Projects/compassql-python",
+          "prompt_id": "9e918352-359a-4249-bd89-eb6b8e2e5872",
+          "hook_event_name": "SessionEnd",
+          "reason": "other"
+        },
+        "metrics": {
+          "session_id": "ddf70098-98c7-4d7f-b28e-896520b4d521",
+          "ended_at": "2026-08-04T17:26:16.938Z",
+          "reason": "other",
+          "agents_spawned": 0,
+          "agents_completed": 0,
+          "modes_used": []
+        },
+        "initialTeamNames": [],
+        "openClawEnabled": false,
+        "openClawRouting": {},
+        "foregroundResult": {
+          "removedTransientFiles": 3,
+          "completedAt": "2026-08-04T17:26:16.982Z"
+        }
+      },
+      "budgetMs": 9000,
+      "completedAt": "2026-08-04T17:26:16.983Z",
+      "lastOutcomeCode": "completed"
+    },
+    "wiki-capture": {
+      "class": "required",
+      "phase": "deferred-required",
+      "status": "completed",
+      "attempts": 0,
+      "idempotencyKey": "1719cd1ef5b51e0269b78c4cb8c9308c9c1f7b82fd1c067fc034c060f23863f5",
+      "payload": {},
+      "budgetMs": 9000,
+      "completedAt": "2026-08-04T17:26:16.940Z"
+    },
+    "team-cleanup": {
+      "class": "required",
+      "phase": "deferred-required",
+      "status": "completed",
+      "attempts": 1,
+      "idempotencyKey": "cee6ac31df545408e1e822247ac249b3f8182a98a5fe8e448ae3b251e55bdee1",
+      "payload": {
+        "transcriptPath": "/home/julsey/.claude/projects/-home-julsey-Projects-compassql-python/ddf70098-98c7-4d7f-b28e-896520b4d521.jsonl",
+        "cwd": "/home/julsey/Projects/compassql-python",
+        "reason": "other",
+        "input": {
+          "session_id": "ddf70098-98c7-4d7f-b28e-896520b4d521",
+          "transcript_path": "/home/julsey/.claude/projects/-home-julsey-Projects-compassql-python/ddf70098-98c7-4d7f-b28e-896520b4d521.jsonl",
+          "cwd": "/home/julsey/Projects/compassql-python",
+          "prompt_id": "9e918352-359a-4249-bd89-eb6b8e2e5872",
+          "hook_event_name": "SessionEnd",
+          "reason": "other"
+        },
+        "metrics": {
+          "session_id": "ddf70098-98c7-4d7f-b28e-896520b4d521",
+          "ended_at": "2026-08-04T17:26:16.938Z",
+          "reason": "other",
+          "agents_spawned": 0,
+          "agents_completed": 0,
+          "modes_used": []
+        },
+        "initialTeamNames": [],
+        "openClawEnabled": false,
+        "openClawRouting": {}
+      },
+      "budgetMs": 9000,
+      "claimedAt": "2026-08-04T17:26:17.047Z",
+      "runner": {
+        "attempt": 1,
+        "runnerNonce": "ed75c96b-2031-4071-a024-b3acfa602589",
+        "phase": "terminal",
+        "deadlineAt": "2026-08-04T17:26:27.026Z"
+      },
+      "lastOutcomeCode": "completed",
+      "completedAt": "2026-08-04T17:26:17.191Z"
+    },
+    "python-cleanup": {
+      "class": "required",
+      "phase": "deferred-required",
+      "status": "completed",
+      "attempts": 1,
+      "idempotencyKey": "1f1370c4ac056606059d517e2f106b602d8cbcb04587b3fcc5f3b9f89e649cd0",
+      "payload": {
+        "transcriptPath": "/home/julsey/.claude/projects/-home-julsey-Projects-compassql-python/ddf70098-98c7-4d7f-b28e-896520b4d521.jsonl",
+        "cwd": "/home/julsey/Projects/compassql-python",
+        "reason": "other",
+        "input": {
+          "session_id": "ddf70098-98c7-4d7f-b28e-896520b4d521",
+          "transcript_path": "/home/julsey/.claude/projects/-home-julsey-Projects-compassql-python/ddf70098-98c7-4d7f-b28e-896520b4d521.jsonl",
+          "cwd": "/home/julsey/Projects/compassql-python",
+          "prompt_id": "9e918352-359a-4249-bd89-eb6b8e2e5872",
+          "hook_event_name": "SessionEnd",
+          "reason": "other"
+        },
+        "metrics": {
+          "session_id": "ddf70098-98c7-4d7f-b28e-896520b4d521",
+          "ended_at": "2026-08-04T17:26:16.938Z",
+          "reason": "other",
+          "agents_spawned": 0,
+          "agents_completed": 0,
+          "modes_used": []
+        },
+        "initialTeamNames": [],
+        "openClawEnabled": false,
+        "openClawRouting": {}
+      },
+      "budgetMs": 9000,
+      "claimedAt": "2026-08-04T17:26:17.206Z",
+      "runner": {
+        "attempt": 1,
+        "runnerNonce": "70d9ca10-5b0a-479d-80d0-d08706a5e444",
+        "phase": "terminal",
+        "deadlineAt": "2026-08-04T17:26:27.026Z"
+      },
+      "lastOutcomeCode": "completed",
+      "completedAt": "2026-08-04T17:26:17.378Z"
+    },
+    "reply-cleanup": {
+      "class": "required",
+      "phase": "deferred-required",
+      "status": "completed",
+      "attempts": 1,
+      "idempotencyKey": "0b3a8b47c28b26d56aca004d4f572b96c118f16819c0d35162418816f9a5420a",
+      "payload": {
+        "transcriptPath": "/home/julsey/.claude/projects/-home-julsey-Projects-compassql-python/ddf70098-98c7-4d7f-b28e-896520b4d521.jsonl",
+        "cwd": "/home/julsey/Projects/compassql-python",
+        "reason": "other",
+        "input": {
+          "session_id": "ddf70098-98c7-4d7f-b28e-896520b4d521",
+          "transcript_path": "/home/julsey/.claude/projects/-home-julsey-Projects-compassql-python/ddf70098-98c7-4d7f-b28e-896520b4d521.jsonl",
+          "cwd": "/home/julsey/Projects/compassql-python",
+          "prompt_id": "9e918352-359a-4249-bd89-eb6b8e2e5872",
+          "hook_event_name": "SessionEnd",
+          "reason": "other"
+        },
+        "metrics": {
+          "session_id": "ddf70098-98c7-4d7f-b28e-896520b4d521",
+          "ended_at": "2026-08-04T17:26:16.938Z",
+          "reason": "other",
+          "agents_spawned": 0,
+          "agents_completed": 0,
+          "modes_used": []
+        },
+        "initialTeamNames": [],
+        "openClawEnabled": false,
+        "openClawRouting": {}
+      },
+      "budgetMs": 9000,
+      "claimedAt": "2026-08-04T17:26:17.393Z",
+      "runner": {
+        "attempt": 1,
+        "runnerNonce": "96790b12-8124-4a53-b8c0-4d01dbf30745",
+        "phase": "terminal",
+        "deadlineAt": "2026-08-04T17:26:27.026Z"
+      },
+      "lastOutcomeCode": "completed",
+      "completedAt": "2026-08-04T17:26:17.536Z"
+    },
+    "callback": {
+      "class": "best-effort",
+      "phase": "deferred-best-effort",
+      "status": "completed",
+      "attempts": 1,
+      "idempotencyKey": "d068ede2655bf89e0c0950e087d0603d7dcf45538e94f20a654d08c6f4841895",
+      "payload": {
+        "transcriptPath": "/home/julsey/.claude/projects/-home-julsey-Projects-compassql-python/ddf70098-98c7-4d7f-b28e-896520b4d521.jsonl",
+        "cwd": "/home/julsey/Projects/compassql-python",
+        "reason": "other",
+        "input": {
+          "session_id": "ddf70098-98c7-4d7f-b28e-896520b4d521",
+          "transcript_path": "/home/julsey/.claude/projects/-home-julsey-Projects-compassql-python/ddf70098-98c7-4d7f-b28e-896520b4d521.jsonl",
+          "cwd": "/home/julsey/Projects/compassql-python",
+          "prompt_id": "9e918352-359a-4249-bd89-eb6b8e2e5872",
+          "hook_event_name": "SessionEnd",
+          "reason": "other"
+        },
+        "metrics": {
+          "session_id": "ddf70098-98c7-4d7f-b28e-896520b4d521",
+          "ended_at": "2026-08-04T17:26:16.938Z",
+          "reason": "other",
+          "agents_spawned": 0,
+          "agents_completed": 0,
+          "modes_used": []
+        },
+        "initialTeamNames": [],
+        "openClawEnabled": false,
+        "openClawRouting": {}
+      },
+      "budgetMs": 2000,
+      "claimedAt": "2026-08-04T17:26:17.552Z",
+      "runner": {
+        "attempt": 1,
+        "runnerNonce": "b2fa63f2-c90f-4924-8281-0421005172a1",
+        "phase": "terminal",
+        "deadlineAt": "2026-08-04T17:26:27.026Z"
+      },
+      "lastOutcomeCode": "completed",
+      "completedAt": "2026-08-04T17:26:17.707Z"
+    },
+    "notification": {
+      "class": "best-effort",
+      "phase": "deferred-best-effort",
+      "status": "completed",
+      "attempts": 1,
+      "idempotencyKey": "89c0438ff63097ce04beb60efb87292ff68a7af350a0ee331f3de9dbf42d62fc",
+      "payload": {
+        "transcriptPath": "/home/julsey/.claude/projects/-home-julsey-Projects-compassql-python/ddf70098-98c7-4d7f-b28e-896520b4d521.jsonl",
+        "cwd": "/home/julsey/Projects/compassql-python",
+        "reason": "other",
+        "input": {
+          "session_id": "ddf70098-98c7-4d7f-b28e-896520b4d521",
+          "transcript_path": "/home/julsey/.claude/projects/-home-julsey-Projects-compassql-python/ddf70098-98c7-4d7f-b28e-896520b4d521.jsonl",
+          "cwd": "/home/julsey/Projects/compassql-python",
+          "prompt_id": "9e918352-359a-4249-bd89-eb6b8e2e5872",
+          "hook_event_name": "SessionEnd",
+          "reason": "other"
+        },
+        "metrics": {
+          "session_id": "ddf70098-98c7-4d7f-b28e-896520b4d521",
+          "ended_at": "2026-08-04T17:26:16.938Z",
+          "reason": "other",
+          "agents_spawned": 0,
+          "agents_completed": 0,
+          "modes_used": []
+        },
+        "initialTeamNames": [],
+        "openClawEnabled": false,
+        "openClawRouting": {}
+      },
+      "budgetMs": 2000,
+      "claimedAt": "2026-08-04T17:26:17.723Z",
+      "runner": {
+        "attempt": 1,
+        "runnerNonce": "36891fd4-5b3d-4229-9661-1a411c2e79e8",
+        "phase": "terminal",
+        "deadlineAt": "2026-08-04T17:26:27.026Z"
+      },
+      "lastOutcomeCode": "completed",
+      "completedAt": "2026-08-04T17:26:17.879Z"
+    },
+    "openclaw": {
+      "class": "best-effort",
+      "phase": "deferred-best-effort",
+      "status": "completed",
+      "attempts": 1,
+      "idempotencyKey": "31fe8f6e1cf204e27006de511df257326fdd98655122ca437013e8779ffc735b",
+      "payload": {
+        "transcriptPath": "/home/julsey/.claude/projects/-home-julsey-Projects-compassql-python/ddf70098-98c7-4d7f-b28e-896520b4d521.jsonl",
+        "cwd": "/home/julsey/Projects/compassql-python",
+        "reason": "other",
+        "input": {
+          "session_id": "ddf70098-98c7-4d7f-b28e-896520b4d521",
+          "transcript_path": "/home/julsey/.claude/projects/-home-julsey-Projects-compassql-python/ddf70098-98c7-4d7f-b28e-896520b4d521.jsonl",
+          "cwd": "/home/julsey/Projects/compassql-python",
+          "prompt_id": "9e918352-359a-4249-bd89-eb6b8e2e5872",
+          "hook_event_name": "SessionEnd",
+          "reason": "other"
+        },
+        "metrics": {
+          "session_id": "ddf70098-98c7-4d7f-b28e-896520b4d521",
+          "ended_at": "2026-08-04T17:26:16.938Z",
+          "reason": "other",
+          "agents_spawned": 0,
+          "agents_completed": 0,
+          "modes_used": []
+        },
+        "initialTeamNames": [],
+        "openClawEnabled": false,
+        "openClawRouting": {}
+      },
+      "budgetMs": 2000,
+      "claimedAt": "2026-08-04T17:26:17.899Z",
+      "runner": {
+        "attempt": 1,
+        "runnerNonce": "6865c4a0-c926-45f3-8075-fb037281f337",
+        "phase": "terminal",
+        "deadlineAt": "2026-08-04T17:26:27.026Z"
+      },
+      "lastOutcomeCode": "completed",
+      "completedAt": "2026-08-04T17:26:18.033Z"
+    }
+  },
+  "owner": null,
+  "phase": "complete",
+  "completion": {
+    "completedAt": "2026-08-04T17:26:18.046Z",
+    "terminalDigest": "486448f3531077b6487753d489e790371f6519a585b0f0434e20d5fdede1897e",
+    "terminalRevision": 40
+  }
+}

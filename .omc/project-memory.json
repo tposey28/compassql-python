@@ -1,0 +1,400 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1785863103995,
+  "projectRoot": "/home/julsey/Projects/compassql-python",
+  "techStack": {
+    "languages": [
+      {
+        "name": "Python",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "pyproject.toml"
+        ]
+      },
+      {
+        "name": "C/C++",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "Makefile"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "pytest",
+        "version": null,
+        "category": "testing"
+      }
+    ],
+    "packageManager": null,
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": "make test",
+    "lintCommand": "ruff check",
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "examples",
+      "tests"
+    ],
+    "gitBranches": {
+      "defaultBranch": "master",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "compassql": {
+      "path": "compassql",
+      "purpose": null,
+      "fileCount": 15,
+      "lastAccessed": 1785863103986,
+      "keyFiles": [
+        "__init__.py",
+        "config.py",
+        "enumerator.py",
+        "generate.py",
+        "model.py"
+      ]
+    },
+    "examples": {
+      "path": "examples",
+      "purpose": "Example code",
+      "fileCount": 1,
+      "lastAccessed": 1785863103988,
+      "keyFiles": [
+        "cql-examples.json"
+      ]
+    },
+    "tests": {
+      "path": "tests",
+      "purpose": "Test files",
+      "fileCount": 7,
+      "lastAccessed": 1785863103989,
+      "keyFiles": [
+        "__init__.py",
+        "fixture.py",
+        "test_generate.py",
+        "test_model.py",
+        "test_nest.py"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "README.md",
+      "accessCount": 1,
+      "lastAccessed": 1785863175594,
+      "type": "file"
+    },
+    {
+      "path": "pyproject.toml",
+      "accessCount": 1,
+      "lastAccessed": 1785863175938,
+      "type": "file"
+    },
+    {
+      "path": "Makefile",
+      "accessCount": 1,
+      "lastAccessed": 1785863176297,
+      "type": "file"
+    },
+    {
+      "path": "compassql/__init__.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863176686,
+      "type": "file"
+    },
+    {
+      "path": "compassql/config.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863176923,
+      "type": "file"
+    },
+    {
+      "path": "compassql/enumerator.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863210059,
+      "type": "file"
+    },
+    {
+      "path": "compassql/generate.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863210420,
+      "type": "file"
+    },
+    {
+      "path": "compassql/model.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863210804,
+      "type": "file"
+    },
+    {
+      "path": "compassql/nest.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863211161,
+      "type": "file"
+    },
+    {
+      "path": "compassql/property.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863211524,
+      "type": "file"
+    },
+    {
+      "path": "compassql/propindex.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863212516,
+      "type": "file"
+    },
+    {
+      "path": "compassql/recommend.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863212625,
+      "type": "file"
+    },
+    {
+      "path": "compassql/result.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863212963,
+      "type": "file"
+    },
+    {
+      "path": "compassql/schema.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863213340,
+      "type": "file"
+    },
+    {
+      "path": "compassql/stylize.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863213694,
+      "type": "file"
+    },
+    {
+      "path": "compassql/wildcard.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863214062,
+      "type": "file"
+    },
+    {
+      "path": "compassql/wildcardindex.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863214425,
+      "type": "file"
+    },
+    {
+      "path": "compassql/vegalite_types.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863214829,
+      "type": "file"
+    },
+    {
+      "path": "compassql/AGENTS.md",
+      "accessCount": 1,
+      "lastAccessed": 1785863247304,
+      "type": "file"
+    },
+    {
+      "path": "compassql/constraint/base.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863251972,
+      "type": "file"
+    },
+    {
+      "path": "compassql/constraint/encoding.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863252678,
+      "type": "file"
+    },
+    {
+      "path": "compassql/constraint/value.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863253052,
+      "type": "file"
+    },
+    {
+      "path": "compassql/constraint/field.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863253416,
+      "type": "file"
+    },
+    {
+      "path": "compassql/constraint/spec.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863253740,
+      "type": "file"
+    },
+    {
+      "path": "compassql/constraint/AGENTS.md",
+      "accessCount": 1,
+      "lastAccessed": 1785863281934,
+      "type": "file"
+    },
+    {
+      "path": "compassql/query/query.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863286282,
+      "type": "file"
+    },
+    {
+      "path": "compassql/query/spec.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863286935,
+      "type": "file"
+    },
+    {
+      "path": "compassql/query/encoding.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863287367,
+      "type": "file"
+    },
+    {
+      "path": "compassql/query/expandedtype.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863287665,
+      "type": "file"
+    },
+    {
+      "path": "compassql/query/groupby.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863288039,
+      "type": "file"
+    },
+    {
+      "path": "compassql/query/normalize.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863288416,
+      "type": "file"
+    },
+    {
+      "path": "compassql/query/shorthand.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863288803,
+      "type": "file"
+    },
+    {
+      "path": "compassql/query/transform.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863289072,
+      "type": "file"
+    },
+    {
+      "path": "compassql/query/AGENTS.md",
+      "accessCount": 1,
+      "lastAccessed": 1785863317383,
+      "type": "file"
+    },
+    {
+      "path": "compassql/ranking/ranking.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863322310,
+      "type": "file"
+    },
+    {
+      "path": "compassql/ranking/aggregation.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863323031,
+      "type": "file"
+    },
+    {
+      "path": "compassql/ranking/fieldorder.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863323404,
+      "type": "file"
+    },
+    {
+      "path": "compassql/ranking/__init__.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863323709,
+      "type": "file"
+    },
+    {
+      "path": "compassql/ranking/effectiveness/__init__.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863331129,
+      "type": "file"
+    },
+    {
+      "path": "compassql/ranking/effectiveness/base.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863331855,
+      "type": "file"
+    },
+    {
+      "path": "compassql/ranking/effectiveness/axis.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863332243,
+      "type": "file"
+    },
+    {
+      "path": "compassql/ranking/effectiveness/dimension.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863332603,
+      "type": "file"
+    },
+    {
+      "path": "compassql/ranking/effectiveness/facet.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863332965,
+      "type": "file"
+    },
+    {
+      "path": "compassql/ranking/effectiveness/mark.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863333674,
+      "type": "file"
+    },
+    {
+      "path": "compassql/ranking/effectiveness/sizechannel.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863334057,
+      "type": "file"
+    },
+    {
+      "path": "compassql/ranking/effectiveness/type.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863334470,
+      "type": "file"
+    },
+    {
+      "path": "compassql/ranking/effectiveness/typechannel.py",
+      "accessCount": 1,
+      "lastAccessed": 1785863334744,
+      "type": "file"
+    },
+    {
+      "path": "compassql/ranking/AGENTS.md",
+      "accessCount": 1,
+      "lastAccessed": 1785863357799,
+      "type": "file"
+    },
+    {
+      "path": "compassql/ranking/effectiveness/AGENTS.md",
+      "accessCount": 1,
+      "lastAccessed": 1785863378506,
+      "type": "file"
+    },
+    {
+      "path": "compassql/schemas/AGENTS.md",
+      "accessCount": 1,
+      "lastAccessed": 1785863399107,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}
