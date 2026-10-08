@@ -11,7 +11,6 @@ from compassql.property import (
     VIEW_PROPS,
     is_encoding_nested_parent,
     get_encoding_nested_prop,
-    to_key,
 )
 from compassql.wildcard import is_wildcard, is_short_wildcard, SHORT_WILDCARD
 from compassql.query.encoding import (
@@ -263,7 +262,6 @@ def _field_def_props(field_q: Any, include: PropIndex[bool], replacer: PropIndex
 
 def parse(shorthand: str) -> Any:
     from compassql.query.spec import SpecQuery
-    from compassql.query.encoding import FieldQuery
 
     parts = shorthand.split("|")
     spec_q = SpecQuery(mark=parts[0], encodings=[])

@@ -7,7 +7,7 @@ from tests.fixture import schema
 
 def _generate(spec_dict, config=None):
     from compassql.generate import generate
-    from compassql.config import DEFAULT_QUERY_CONFIG, QueryConfig
+    from compassql.config import DEFAULT_QUERY_CONFIG
     cfg = config or DEFAULT_QUERY_CONFIG
     return generate(spec_dict, schema, cfg)
 

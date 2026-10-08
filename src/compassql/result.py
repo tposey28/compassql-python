@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Callable, Generic, Optional, TypeVar, Union
+from typing import Any, Callable, Generic, Iterator, Optional, TypeVar, Union
 
 T = TypeVar("T")
 U = TypeVar("U")
@@ -43,3 +43,18 @@ def map_leaves(group: ResultTree[T], f: Callable[[T], U]) -> ResultTree[U]:
         group_by=group.group_by,
         order_group_by=group.order_group_by,
     )
+
+
+def iter_leaves(group: ResultTree[T]) -> Iterator[T]:
+    """Yield every leaf item, depth-first, in ranked order.
+
+    nest() can nest ResultTrees arbitrarily deep (one level per Nest entry), and
+    an unnested query still returns a tree wrapping a flat item list -- so
+    callers that just want "the ranked specs" have to walk it. rank() sorts
+    items in place at each level, so depth-first order is ranked order.
+    """
+    for item in group.items:
+        if is_result_tree(item):
+            yield from iter_leaves(item)
+        else:
+            yield item

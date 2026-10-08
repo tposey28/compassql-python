@@ -8,7 +8,6 @@ from compassql.property import (
     ENCODING_NESTED_PROPS,
 )
 from compassql.propindex import PropIndex
-from compassql.wildcard import is_wildcard
 from compassql.query.encoding import is_value_query, is_disabled_auto_count_query
 
 # ---------------------------------------------------------------------------
@@ -70,7 +69,8 @@ def encoding_property_enumerator_factory(prop: Any) -> EnumeratorFactory:
                     return
 
                 index = indices[job_index]
-                wildcard = wildcard_index.encodings[index].get(prop)
+                enc_wildcards = wildcard_index.encodings.get(index)
+                wildcard = enc_wildcards.get(prop) if enc_wildcards else None
                 enc_q = spec_m.get_encoding_query_by_index(index)
                 prop_wildcard = spec_m.get_encoding_property(index, prop)
 

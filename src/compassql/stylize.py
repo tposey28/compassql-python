@@ -4,7 +4,7 @@ from typing import Any
 
 from compassql.config import QueryConfig
 from compassql.query.encoding import is_field_query
-from compassql.schema import Schema, ExpandedType
+from compassql.schema import Schema
 
 
 def _scale_type(enc_q: Any) -> str | None:

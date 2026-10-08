@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from enum import Enum
 
-from compassql.vegalite_types import VLType
-
 
 class ExpandedType(str, Enum):
     QUANTITATIVE = "quantitative"

@@ -1,9 +1,7 @@
 from __future__ import annotations
 
 from compassql.ranking.effectiveness.base import Scorer
-from compassql.ranking.effectiveness.type import (
-    BIN_Q, T, TIMEUNIT_T, TIMEUNIT_O, O, N, get_extended_type,
-)
+from compassql.ranking.effectiveness.type import BIN_Q, T, TIMEUNIT_T, TIMEUNIT_O, O, N, get_extended_type
 
 
 def _fq_attr(fq, attr, default=None):

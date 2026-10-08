@@ -397,7 +397,7 @@ DEFAULT_ENUM_INDEX: dict[str, Any] = {
 
 def get_default_name(prop: Any) -> str:
     """Return the short default wildcard name for a property."""
-    from compassql.property import EncodingNestedProp, is_encoding_nested_prop
+    from compassql.property import is_encoding_nested_prop
     if is_encoding_nested_prop(prop):
         parent_short = DEFAULT_NAME.get(prop.parent, prop.parent)
         parent_props_map = DEFAULT_NAME.get(f"{prop.parent}Props", {})
@@ -413,7 +413,7 @@ def get_default_name(prop: Any) -> str:
 
 def get_default_enum_values(prop: Any, schema: Any, opt: Any) -> list:
     """Return the default enum values for a property given schema and config."""
-    from compassql.property import EncodingNestedProp, is_encoding_nested_prop
+    from compassql.property import is_encoding_nested_prop
     # field always enumerates all schema fields
     if prop == "field":
         return schema.field_names() if schema else []

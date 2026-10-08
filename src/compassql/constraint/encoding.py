@@ -3,7 +3,14 @@ from __future__ import annotations
 
 from typing import Optional
 
+from compassql.constraint.base import constraint_enabled
+from compassql.propindex import PropIndex
 from compassql.query.encoding import is_value_query
+
+# Stands in for a fully-specified encoding, which WildcardIndex.encodings holds
+# no entry for. Checkers dereference the value (wc.has(...)), so a miss has to
+# yield an empty index rather than None.
+_NO_WILDCARDS = PropIndex()
 
 
 def check_encoding(prop, wildcard, index: int, spec_m, schema, opt) -> Optional[str]:
@@ -14,14 +21,10 @@ def check_encoding(prop, wildcard, index: int, spec_m, schema, opt) -> Optional[
     from compassql.constraint.value import VALUE_CONSTRAINTS_BY_PROPERTY
 
     enc_q = spec_m.get_encoding_query_by_index(index)
-    enc_wc_index = (
-        spec_m.wildcard_index.encodings[index]
-        if index < len(spec_m.wildcard_index.encodings)
-        else None
-    )
+    enc_wc_index = spec_m.wildcard_index.encodings.get(index) or _NO_WILDCARDS
 
     for c in (FIELD_CONSTRAINTS_BY_PROPERTY.get(prop) or []):
-        if c.strict() or bool(getattr(opt, c.name(), False)):
+        if constraint_enabled(c, opt):
             if not c.satisfy(enc_q, schema, enc_wc_index, opt):
                 violated = f"(enc) {c.name()}"
                 if getattr(opt, "verbose", False):
@@ -31,7 +34,7 @@ def check_encoding(prop, wildcard, index: int, spec_m, schema, opt) -> Optional[
 
     if is_value_query(enc_q):
         for c in (VALUE_CONSTRAINTS_BY_PROPERTY.get(prop) or []):
-            if c.strict() or bool(getattr(opt, c.name(), False)):
+            if constraint_enabled(c, opt):
                 if not c.satisfy(enc_q, schema, enc_wc_index, opt):
                     violated = f"(enc) {c.name()}"
                     if getattr(opt, "verbose", False):

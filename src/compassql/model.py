@@ -3,17 +3,15 @@ from __future__ import annotations
 import copy
 from typing import Any, Optional, Union
 
-from compassql.config import QueryConfig, DEFAULT_QUERY_CONFIG
+from compassql.config import QueryConfig
 from compassql.property import (
     ENCODING_TOPLEVEL_PROPS,
     ENCODING_NESTED_PROPS,
-    EncodingNestedProp,
     Property,
     is_encoding_nested_prop,
     is_encoding_nested_parent,
 )
 from compassql.query.encoding import (
-    EncodingQuery,
     is_auto_count_query,
     is_disabled_auto_count_query,
     is_field_query,

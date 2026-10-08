@@ -1,14 +1,15 @@
 [build-system]
 requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.backends.legacy:build"
+build-backend = "setuptools.build_meta"
 
 [project]
-name = "compassql"
+name = "compassql-python"
 version = "0.1.0"
 description = "Visualization recommendation engine (Python port of vega/compassql)"
 requires-python = ">=3.10"
 dependencies = [
-  "pandas>=2.0",
+  "pandas>=2,<3",   # keep aligned with pdr-viz; an unbounded upper bound
+                    # pulls pandas 3.x and breaks pdr-viz's <3 constraint
   "numpy>=1.24",
   "python-dateutil>=2.8",
 ]
@@ -16,11 +17,14 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest>=7", "datamodel-code-generator>=0.25"]
 
+[tool.setuptools]
+package-dir = {"" = "src"}
+
 [tool.setuptools.packages.find]
-where = ["."]
-include = ["compassql*"]
+where = ["src"]
 
 [tool.pytest.ini_options]
+pythonpath = ["src"]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]

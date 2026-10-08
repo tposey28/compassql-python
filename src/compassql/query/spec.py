@@ -4,13 +4,11 @@ from dataclasses import dataclass, field
 from typing import Any, Optional, Union
 
 from compassql.wildcard import is_wildcard
-from compassql.property import Property
 from compassql.query.encoding import (
     EncodingQuery,
     is_disabled_auto_count_query,
     is_enabled_auto_count_query,
     is_field_query,
-    to_encoding,
 )
 from compassql.query.transform import TransformQuery
 
@@ -30,20 +28,50 @@ class SpecQuery:
 
 
 def from_spec(spec: dict[str, Any]) -> SpecQuery:
+    """Build a SpecQuery from either query or Vega-Lite shaped input.
+
+    Two encoding forms are accepted:
+
+    - ``encodings``: a CompassQL list, where ``channel`` may itself be a
+      wildcard. This is the form that expresses an actual *query* -- a dict
+      cannot be keyed by ``"?"``, so channel wildcards are inexpressible in the
+      Vega-Lite shape below.
+    - ``encoding``: a Vega-Lite object keyed by channel, for turning a concrete
+      spec into a query.
+    """
     from compassql.query.encoding import encoding_query_from_dict
+
+    if spec.get("encodings") is not None and spec.get("encoding") is not None:
+        raise ValueError(
+            "spec has both 'encodings' (query form) and 'encoding' (Vega-Lite "
+            "form); provide exactly one"
+        )
+
     encodings: list[EncodingQuery] = []
-    for channel, channel_def in (spec.get("encoding") or {}).items():
-        props: dict[str, Any] = {"channel": channel}
-        if isinstance(channel_def, dict):
-            for prop, val in channel_def.items():
-                if val is not None:
-                    if prop in ("bin", "scale", "axis", "legend") and val is None:
-                        props[prop] = False
-                    else:
+
+    if spec.get("encodings") is not None:
+        raw_encodings = spec["encodings"]
+        if not isinstance(raw_encodings, list):
+            raise ValueError("'encodings' must be a list of encoding queries")
+        for enc_q in raw_encodings:
+            if not isinstance(enc_q, dict):
+                # already an EncodingQuery -- pass it through untouched
+                encodings.append(enc_q)
+                continue
+            props = {k: v for k, v in enc_q.items() if v is not None}
+            if props.get("aggregate") == "count" and not props.get("field"):
+                props["field"] = "*"
+            encodings.append(encoding_query_from_dict(props))
+    else:
+        for channel, channel_def in (spec.get("encoding") or {}).items():
+            props: dict[str, Any] = {"channel": channel}
+            if isinstance(channel_def, dict):
+                for prop, val in channel_def.items():
+                    if val is not None:
                         props[prop] = val
-        if props.get("aggregate") == "count" and not props.get("field"):
-            props["field"] = "*"
-        encodings.append(encoding_query_from_dict(props))
+            if props.get("aggregate") == "count" and not props.get("field"):
+                props["field"] = "*"
+            encodings.append(encoding_query_from_dict(props))
 
     return SpecQuery(
         mark=spec.get("mark"),

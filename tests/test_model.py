@@ -11,9 +11,9 @@ from tests.fixture import schema
 from compassql.config import DEFAULT_QUERY_CONFIG
 from compassql.model import SpecQueryModel
 from compassql.query.spec import SpecQuery
-from compassql.query.encoding import FieldQuery, AutoCountQuery
+from compassql.query.encoding import FieldQuery
 from compassql.wildcard import SHORT_WILDCARD, Wildcard, is_wildcard
-from compassql.property import Property, ENCODING_TOPLEVEL_PROPS
+from compassql.property import ENCODING_TOPLEVEL_PROPS
 
 
 def build(spec_q: SpecQuery) -> SpecQueryModel:

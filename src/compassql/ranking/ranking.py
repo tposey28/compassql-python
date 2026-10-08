@@ -3,7 +3,8 @@ from __future__ import annotations
 from typing import Callable
 
 from compassql.ranking.effectiveness import effectiveness
-from compassql.ranking import aggregation, fieldorder
+from compassql.ranking import fieldorder
+from compassql.ranking import aggregation
 
 RankingFn = Callable  # (spec_m, schema, opt) -> dict
 

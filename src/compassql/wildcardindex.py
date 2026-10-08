@@ -4,7 +4,7 @@ from typing import Any, Optional
 
 from compassql.propindex import PropIndex
 from compassql.property import Property, is_encoding_property
-from compassql.wildcard import Wildcard, is_wildcard
+from compassql.wildcard import Wildcard
 
 
 class WildcardIndex:

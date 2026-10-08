@@ -1,11 +1,11 @@
 from __future__ import annotations
 
+import re
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Any, Callable, Optional
 
 from compassql.propindex import PropIndex
-from compassql.property import Property
 from compassql.wildcard import is_wildcard
 
 
@@ -16,6 +16,27 @@ class AbstractConstraint:
     properties: list
     allow_wildcard_for_properties: bool
     strict_: bool
+
+
+_CAMEL_BOUNDARY = re.compile(r"(?<!^)(?=[A-Z])")
+
+
+def config_field_name(constraint_name: str) -> str:
+    """Map an upstream camelCase constraint name to its QueryConfig field.
+
+    Constraint names mirror the TypeScript original (`omitRepeatedField`)
+    while QueryConfig fields are snake_case (`omit_repeated_field`).
+    tests/constraint/test_spec.py asserts every non-strict constraint has a
+    config field under exactly this transformation.
+    """
+    return _CAMEL_BOUNDARY.sub("_", constraint_name).lower()
+
+
+def constraint_enabled(constraint, opt) -> bool:
+    """Whether a constraint should run: strict ones always, others per config."""
+    if constraint.strict():
+        return True
+    return bool(getattr(opt, config_field_name(constraint.name()), False))
 
 
 class AbstractConstraintModel(ABC):

@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Optional, Union
 
-from compassql.wildcard import is_wildcard, SHORT_WILDCARD, Wildcard
+from compassql.wildcard import is_wildcard
 from compassql.query.expandedtype import ExpandedType
 
 

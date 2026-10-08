@@ -3,7 +3,8 @@ from compassql.ranking.ranking import (
     comparator_factory, group_comparator_factory,
     EFFECTIVENESS,
 )
-from compassql.ranking import aggregation, fieldorder
+from compassql.ranking import fieldorder
+from compassql.ranking import aggregation
 from compassql.ranking.effectiveness import effectiveness
 
 __all__ = [

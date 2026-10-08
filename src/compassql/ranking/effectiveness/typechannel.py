@@ -1,10 +1,7 @@
 from __future__ import annotations
 
 from compassql.ranking.effectiveness.base import Scorer
-from compassql.ranking.effectiveness.type import (
-    ExtendedType, Q, T, BIN_Q, TIMEUNIT_T, TIMEUNIT_O, O, N, K,
-    get_extended_type,
-)
+from compassql.ranking.effectiveness.type import ExtendedType, Q, T, BIN_Q, TIMEUNIT_T, TIMEUNIT_O, O, N, K, get_extended_type
 
 TERRIBLE = -10.0
 

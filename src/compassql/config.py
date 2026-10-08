@@ -27,6 +27,12 @@ class QueryConfig:
     omit_aggregate_plot_with_dimension_only_on_facet: bool = True
     omit_aggregate_plot_without_dimension: bool = False
     omit_bar_line_area_with_occlusion: bool = True
+    # Upstream assumes every raw plot occludes, so bar/line/area are pruned from
+    # any non-aggregated spec without ever looking at the data. Off (the
+    # default) keeps that blanket assumption; on, omitBarLineAreaWithOcclusion
+    # consults the schema instead and only prunes a raw plot whose x values
+    # actually repeat.
+    measure_occlusion: bool = False
     omit_bar_tick_with_size: bool = True
     omit_multiple_non_positional_channels: bool = True
     omit_raw: bool = False

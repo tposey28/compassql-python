@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from typing import Callable, Optional, Any
 
-from compassql.constraint.base import AbstractConstraint, AbstractConstraintModel
+from compassql.constraint.base import AbstractConstraint, constraint_enabled, AbstractConstraintModel
 from compassql.property import (
     Property,
     is_encoding_property,
@@ -23,7 +23,6 @@ from compassql.query.encoding import (
 )
 from compassql.vegalite_types import (
     Mark,
-    Channel,
     SUM_OPS,
     NONPOSITION_CHANNELS,
     support_mark,
@@ -264,10 +263,55 @@ def _omit_aggregate_plot_without_dimension(spec_m, schema, opt) -> bool:
     return True
 
 
+# x types a line or area may interpolate across. Interpolating between discrete
+# categories draws a trend that does not exist, so line/area need one of these
+# even when the data says the plot does not occlude.
+_CONTINUOUS_TYPES = ("quantitative", "temporal")
+
+
 def _omit_bar_line_area_with_occlusion(spec_m, schema, opt) -> bool:
     mark = str(spec_m.get_mark())
-    if mark in (str(Mark.BAR), str(Mark.LINE), str(Mark.AREA), "bar", "line", "area"):
-        return spec_m.is_aggregate()
+    if mark not in (str(Mark.BAR), str(Mark.LINE), str(Mark.AREA), "bar", "line", "area"):
+        return True
+    if spec_m.is_aggregate():
+        return True
+    # Upstream stops here and prunes every raw bar/line/area, on the assumption
+    # that raw data always occludes. That assumption is wrong for a measured
+    # series with one row per x, so opt.measure_occlusion lets the data decide.
+    if not getattr(opt, "measure_occlusion", False):
+        return False
+    return _raw_plot_without_occlusion(mark, spec_m, schema)
+
+
+def _raw_plot_without_occlusion(mark: str, spec_m, schema) -> bool:
+    """Whether a raw plot of this mark actually reads correctly.
+
+    Conservative by construction: anything we cannot measure — no x encoding, a
+    value or autoCount on x, or a field the schema does not carry — is treated
+    as occluded, which is upstream's answer.
+    """
+    x_enc = spec_m.get_encoding_query_by_channel("x")
+    if x_enc is None or not is_field_query(x_enc):
+        return False
+
+    field_name = _enc_attr(x_enc, "field")
+    if field_name is None or is_wildcard(field_name):
+        return False
+
+    field_schema = schema.field_schema(str(field_name))
+    if field_schema is None or field_schema.stats is None:
+        return False
+
+    # Repeated x values stack marks on top of each other; one row per x does not.
+    # This reads the raw stats, so a binned or time-unit-grouped x is judged on
+    # its ungrouped values — the conservative direction, since grouping can only
+    # merge values and make occlusion more likely, never less.
+    stats = field_schema.stats
+    if stats.distinct < stats.count:
+        return False
+
+    if mark in (str(Mark.LINE), str(Mark.AREA), "line", "area"):
+        return _enc_attr(x_enc, "type") in _CONTINUOUS_TYPES
     return True
 
 
@@ -598,7 +642,23 @@ SPEC_CONSTRAINTS: list[SpecConstraintModel] = [
     _make(
         "omitBarLineAreaWithOcclusion",
         "Don't use bar, line or area to visualize raw plot as they often lead to occlusion.",
-        [Property.MARK, Property.AGGREGATE, Property.AUTOCOUNT],
+        # CHANNEL, FIELD and TYPE are here for the measured mode: it looks up
+        # the x encoding (CHANNEL), its column in the schema (FIELD) and, for
+        # line/area, whether that column is continuous (TYPE). With
+        # allow_wildcard_for_properties False the constraint is skipped while
+        # any of these is still a wildcard, so leaving them out would let it run
+        # before x exists and prune on a half-built spec. Widening also means it
+        # now fires at channel/field/type enumeration in *both* modes; that is
+        # safe because all three come before mark in DEFAULT_PROP_PRECEDENCE, so
+        # the constraint still gets a fully-specified spec to judge.
+        [
+            Property.MARK,
+            Property.AGGREGATE,
+            Property.AUTOCOUNT,
+            Property.CHANNEL,
+            Property.FIELD,
+            Property.TYPE,
+        ],
         False, False,
         _omit_bar_line_area_with_occlusion,
     ),
@@ -756,7 +816,7 @@ def check_spec(prop, wildcard, spec_m, schema, opt) -> Optional[str]:
     """
     constraints = SPEC_CONSTRAINTS_BY_PROPERTY.get(prop) or []
     for c in constraints:
-        if c.strict() or bool(getattr(opt, c.name(), False)):
+        if constraint_enabled(c, opt):
             if not c.satisfy(spec_m, schema, opt):
                 violated = f"(spec) {c.name()}"
                 if getattr(opt, "verbose", False):

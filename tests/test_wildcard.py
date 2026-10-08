@@ -15,7 +15,6 @@ from compassql.wildcard import (
     init_wildcard,
 )
 from compassql.property import DEFAULT_PROP_PRECEDENCE
-from compassql.config import DEFAULT_QUERY_CONFIG
 
 
 class TestIsWildcard:

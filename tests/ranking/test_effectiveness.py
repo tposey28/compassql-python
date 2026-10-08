@@ -7,7 +7,7 @@ from compassql.model import SpecQueryModel
 from compassql.ranking.effectiveness import effectiveness
 from compassql.ranking.effectiveness.mark import MarkScorer, featurize
 from compassql.ranking.effectiveness.typechannel import TypeChannelScorer, TERRIBLE
-from compassql.ranking.effectiveness.type import Q, T, BIN_Q, TIMEUNIT_T, TIMEUNIT_O, O, N, K, NONE
+from compassql.ranking.effectiveness.type import Q, BIN_Q, TIMEUNIT_T, N, K, T
 from tests.fixture import schema
 
 

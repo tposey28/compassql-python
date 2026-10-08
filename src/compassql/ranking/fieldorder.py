@@ -29,7 +29,8 @@ def score(spec_m, schema, opt) -> dict:
         if field is None:
             continue
 
-        field_wc = wc_index.encodings[idx].get("field") if wc_index.encodings else None
+        enc_wildcards = wc_index.encodings.get(idx)
+        field_wc = enc_wildcards.get("field") if enc_wildcards else None
         field_schema = schema.field_schema(field)
         if field_schema is None:
             continue

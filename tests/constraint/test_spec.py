@@ -19,12 +19,14 @@ from compassql.wildcard import SHORT_WILDCARD
 
 schema = Schema([])
 
-CONSTRAINT_MANUALLY_SPECIFIED_CONFIG = DEFAULT_QUERY_CONFIG.__class__(
-    **{
-        **{f: getattr(DEFAULT_QUERY_CONFIG, f) for f in DEFAULT_QUERY_CONFIG.__dataclass_fields__},
-        "constraint_manually_specified_value": True,
-    }
-)
+def _config(**overrides):
+    """The default QueryConfig with some fields overridden."""
+
+    fields = {f: getattr(DEFAULT_QUERY_CONFIG, f) for f in DEFAULT_QUERY_CONFIG.__dataclass_fields__}
+    return DEFAULT_QUERY_CONFIG.__class__(**{**fields, **overrides})
+
+
+CONSTRAINT_MANUALLY_SPECIFIED_CONFIG = _config(constraint_manually_specified_value=True)
 
 
 def build_spec_query_model(spec_q: dict) -> SpecQueryModel:
@@ -299,6 +301,118 @@ class TestOmitBarLineAreaWithOcclusion:
         })
         assert SPEC_CONSTRAINT_INDEX["omitBarLineAreaWithOcclusion"].satisfy(
             spec_m, schema, DEFAULT_QUERY_CONFIG
+        )
+
+
+# Ten rows, one column per case the measured mode has to distinguish:
+# a quantitative x with one row per value, the same shape with each value
+# repeated, and a nominal x whose categories are all distinct.
+MEASURED_ROWS = [
+    {
+        "unique_q": float(i),
+        "repeat_q": float(i // 2),
+        "unique_n": chr(ord("a") + i),
+        "dep": float(i) * 2.0,
+    }
+    for i in range(10)
+]
+measured_schema = Schema.build_from_data(MEASURED_ROWS)
+
+MEASURING_CONFIG = _config(measure_occlusion=True)
+
+
+def _occlusion_spec(mark: str, x_field: str, x_type: str, aggregate: str | None = None) -> dict:
+    y_enc = {"channel": "y", "field": "dep", "type": "quantitative"}
+    if aggregate:
+        y_enc["aggregate"] = aggregate
+    return {
+        "mark": mark,
+        "encodings": [{"channel": "x", "field": x_field, "type": x_type}, y_enc],
+    }
+
+
+def _admits(spec_q: dict, opt) -> bool:
+    spec_m = SpecQueryModel.build(spec_q, measured_schema, opt)
+    return SPEC_CONSTRAINT_INDEX["omitBarLineAreaWithOcclusion"].satisfy(
+        spec_m, measured_schema, opt
+    )
+
+
+class TestOmitBarLineAreaWithMeasuredOcclusion:
+    """`measure_occlusion` makes the constraint consult the data.
+
+    Off (the default) it must behave exactly as upstream does, whatever the
+    schema says; on, a raw plot survives only when its x values do not repeat.
+    """
+
+    @pytest.mark.parametrize("mark", ["bar", "line", "area"])
+    def test_default_still_prunes_a_raw_plot_over_a_unique_x(self, mark):
+        """The schema now says this plot does not occlude. The default must not
+        care -- that is the upstream behaviour the flag exists to opt out of."""
+        assert not _admits(
+            _occlusion_spec(mark, "unique_q", "quantitative"), DEFAULT_QUERY_CONFIG
+        )
+
+    @pytest.mark.parametrize("mark", ["bar", "line", "area"])
+    def test_default_still_admits_an_aggregate_plot(self, mark):
+        assert _admits(
+            _occlusion_spec(mark, "unique_n", "nominal", aggregate="mean"),
+            DEFAULT_QUERY_CONFIG,
+        )
+
+    @pytest.mark.parametrize("mark", ["bar", "line", "area"])
+    def test_measured_admits_a_continuous_x_with_one_row_per_value(self, mark):
+        """Nothing overlaps, so none of the three marks occludes."""
+        assert _admits(_occlusion_spec(mark, "unique_q", "quantitative"), MEASURING_CONFIG)
+
+    @pytest.mark.parametrize("mark", ["bar", "line", "area"])
+    def test_measured_prunes_a_repeating_x(self, mark):
+        """Two rows per x value: the marks land on top of each other."""
+        assert not _admits(_occlusion_spec(mark, "repeat_q", "quantitative"), MEASURING_CONFIG)
+
+    def test_measured_admits_a_bar_over_distinct_categories(self):
+        """One bar per category is the ordinary bar chart, not an occluded one."""
+        assert _admits(_occlusion_spec("bar", "unique_n", "nominal"), MEASURING_CONFIG)
+
+    @pytest.mark.parametrize("mark", ["line", "area"])
+    def test_measured_prunes_line_and_area_over_categories(self, mark):
+        """They interpolate between points, and there is nothing between two
+        unrelated categories to interpolate over -- `line|x:treatment,n` draws a
+        trend across treatment groups that does not exist."""
+        assert not _admits(_occlusion_spec(mark, "unique_n", "nominal"), MEASURING_CONFIG)
+
+    @pytest.mark.parametrize("mark", ["bar", "line", "area"])
+    def test_measured_prunes_when_there_is_no_x_encoding(self, mark):
+        """Nothing to measure, so stay with upstream's answer."""
+        spec_q = {
+            "mark": mark,
+            "encodings": [{"channel": "y", "field": "dep", "type": "quantitative"}],
+        }
+        assert not _admits(spec_q, MEASURING_CONFIG)
+
+    @pytest.mark.parametrize("mark", ["bar", "line", "area"])
+    def test_measured_prunes_a_field_the_schema_does_not_carry(self, mark):
+        """Also must not raise: the schema a query is run against need not be
+        the one its fields were named from."""
+        assert not _admits(
+            _occlusion_spec(mark, "not_in_the_schema", "quantitative"), MEASURING_CONFIG
+        )
+
+    def test_measured_admits_a_temporal_x(self):
+        """Temporal counts as continuous -- a measured time series is the case
+        the whole option exists for."""
+        rows = [{"t": f"2024-01-{day:02d}", "dep": float(day)} for day in range(1, 13)]
+        temporal_schema = Schema.build_from_data(rows)
+        spec_q = {
+            "mark": "line",
+            "encodings": [
+                {"channel": "x", "field": "t", "type": "temporal"},
+                {"channel": "y", "field": "dep", "type": "quantitative"},
+            ],
+        }
+        spec_m = SpecQueryModel.build(spec_q, temporal_schema, MEASURING_CONFIG)
+        assert SPEC_CONSTRAINT_INDEX["omitBarLineAreaWithOcclusion"].satisfy(
+            spec_m, temporal_schema, MEASURING_CONFIG
         )
 
 

@@ -2,9 +2,9 @@
 
 regen-types:
 	datamodel-codegen \
-		--input compassql/schemas/vega-lite-v5.json \
+		--input src/compassql/schemas/vega-lite-v5.json \
 		--input-file-type jsonschema \
-		--output compassql/vegalite_types.py \
+		--output src/compassql/vegalite_types.py \
 		--enum-field-as-literal one \
 		--use-standard-collections
 

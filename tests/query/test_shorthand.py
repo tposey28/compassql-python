@@ -10,10 +10,7 @@ import pytest
 from compassql.query.shorthand import (
     spec as spec_shorthand,
     encoding as encoding_shorthand,
-    field_def as field_def_shorthand,
     get_replacer,
-    INCLUDE_ALL,
-    REPLACE_NONE,
     parse,
     vlspec,
     _split_with_tail,

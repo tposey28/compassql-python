@@ -120,6 +120,18 @@ def _bin_stats(max_bins: int, stats: FieldStats) -> FieldStats:
     # Simple linear binning (mirrors datalib's bin algorithm)
     import math
     raw_step = (max_val - min_val) / max_bins
+
+    # An all-NaN or empty column gives min == max == NaN, so raw_step is NaN;
+    # an unbounded one gives inf. Upstream JS degrades here rather than throwing
+    # (Math.log10(NaN) is NaN, Math.floor(NaN) is NaN, Math.pow(10, NaN) is NaN),
+    # but math.floor(nan) raises ValueError and math.floor(inf) raises
+    # OverflowError. Return the field unbinned so the port matches upstream's
+    # "no usable bins" outcome instead of failing the whole schema build.
+    # (raw_step <= 0 is unreachable while min == max returns above, but log10(0)
+    # is -inf and would raise the same way, so it is folded into the guard.)
+    if not math.isfinite(raw_step) or raw_step <= 0:
+        return copy.copy(stats)
+
     magnitude = 10 ** math.floor(math.log10(raw_step))
     nice_steps = [1, 2, 5, 10]
     step = magnitude * next((s for s in nice_steps if s * magnitude >= raw_step), 10)
