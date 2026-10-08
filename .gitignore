@@ -27,3 +27,7 @@ htmlcov/
 .serena/
 /.idea/
 AGENTS.md
+
+# OMC runtime state (local only)
+.omc/
+.omc-workspace
